@@ -12,6 +12,8 @@ import com.example.newsapp.Model.BeritaItem;
 import com.example.newsapp.Model.ResponseNews;
 import com.example.newsapp.Network.Injection;
 import com.example.newsapp.Network.NewsService;
+import com.example.newsapp.Presenter.MainPresenter;
+import com.example.newsapp.View.MainView;
 
 import java.util.List;
 
@@ -19,9 +21,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainView {
+    //ngeimplement mainview diminta implement 4 method dari mainview dan baseview (mainview soalnya extends baseview)
+
 
     List<BeritaItem> dataBerita;
+    MainPresenter mainPresenter;
     RecyclerView recyclerView;
     BeritaAdapter adapter;
 
@@ -31,32 +36,47 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         recyclerView = findViewById(R.id.recyclerView);
-        getBerita();
+        mainPresenter = new MainPresenter(this);
+        mainPresenter.getAllBerita();
+    }
 
+    @Override
+    public void getBerita(List<BeritaItem> berita) {
 //        adapter = new BeritaAdapter(this, dataBerita);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//
 //        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new BeritaAdapter(this, berita);
+        recyclerView.setAdapter(adapter);
 
     }
 
-    private void getBerita() {
-        //manggil class injection trus manggil method getService di injection, method getService itu manggil NewsService, trs di newsservice manggil method getAllBerita (callback)
-        Injection.getService().getAllBerita().enqueue(new Callback<ResponseNews>() {
-            @Override
-            public void onResponse(Call<ResponseNews> call, Response<ResponseNews> response) {
-                if (response.isSuccessful()){
-                    dataBerita = response.body().getBerita();
-                    adapter = new BeritaAdapter(getApplicationContext(), dataBerita);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                    recyclerView.setAdapter(adapter);
-                }
-            }
+    @Override
+    public void error(String msg) {
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+    }
 
-            @Override
-            public void onFailure(Call<ResponseNews> call, Throwable t) {
-                Toast.makeText(getApplicationContext(),"Failed", Toast.LENGTH_SHORT);
-            }
-        });
+
+    //onattach buat attach presenter ke view
+    @Override
+    public void onAttachView() {
+        mainPresenter.onAttach(this);
+    }
+
+    @Override
+    public void onDetachView() {
+        mainPresenter.onDetach(this);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onAttachView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        onDetachView();
     }
 }
