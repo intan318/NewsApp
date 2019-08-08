@@ -61,6 +61,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.ViewHolder
                 i.putExtra("tanggal", data.getTanggalPosting());
                 i.putExtra("penulis", data.getPenulis());
                 i.putExtra("image", urlImg + data.getFoto());
+                i.putExtra("isiberita", data.getIsiBerita());
 
                 context.startActivity(i);
             }
@@ -77,6 +78,7 @@ public class BeritaAdapter extends RecyclerView.Adapter<BeritaAdapter.ViewHolder
         TextView tanggal;
         TextView penulis;
         ImageView image;
+
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -19,7 +19,7 @@ public class DetailActivity extends AppCompatActivity {
     ImageView detailImg;
     WebView webView;
 
-    private View webviewBerita;
+//    private View webviewBerita;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class DetailActivity extends AppCompatActivity {
         String detPenulis = i.getStringExtra("penulis");
         String detTgl = i.getStringExtra("tanggal");
         String detImg = i.getStringExtra("image");
+        String isi_berita = i.getStringExtra("isiberita");
 //        Integer detImg = i.getIntExtra("image", 0);
 
         detailJudul.setText(detJudul);
@@ -42,6 +43,9 @@ public class DetailActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(detImg)
                 .into(detailImg);
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadData(isi_berita, "text/html;charset=utf-8", "UTF-8");
     }
 
     private void tampilBerita() {
@@ -54,7 +58,8 @@ public class DetailActivity extends AppCompatActivity {
         detailPenulis = findViewById(R.id.txtEditorBerita);
         detailTgl = findViewById(R.id.txtTglBerita);
         detailImg = findViewById(R.id.imgBerita);
-//        webView = findViewById(R.id.web)
+        webView = findViewById(R.id.wvDetailBerita);
+
     }
 
 }
