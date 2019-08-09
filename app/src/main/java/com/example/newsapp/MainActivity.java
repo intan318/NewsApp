@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @Override
     public void error(String msg) {
+
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 

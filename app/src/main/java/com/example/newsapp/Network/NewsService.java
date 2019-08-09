@@ -8,4 +8,5 @@ import retrofit2.http.GET;
 public interface NewsService {
     @GET("tampil_berita.php")
     Call<ResponseNews> getAllBerita();
+
 }
